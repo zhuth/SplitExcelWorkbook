@@ -67,5 +67,38 @@ namespace SplitExcelWorkbook
         {
 
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+            var sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+            var bs = new Workbook[ofd.FileNames.Length];
+            for (int i = 0; i < bs.Length; ++i)
+            {
+                bs[i] = new Workbook(); bs[i].Open(ofd.FileNames[i]);
+            }
+            var b = new Workbook();
+
+            int rows = 0, cols = 0;
+            // copy the first workbook
+            for (; bs[0].Worksheets[0].Cells[rows, cols].Value != null; ++cols) ;
+
+            for (; bs[0].Worksheets[0].Cells[rows, 0].Value != null; ++rows)
+                for (int j = 0; j < cols; ++j)
+                    b.Worksheets[0].Cells[rows, j].PutValue(bs[0].Worksheets[0].Cells[rows, j].Value);
+
+            for (int bi = 1; bi < bs.Length; ++bi)
+            {
+                for (int ri = 1; bs[bi].Worksheets[0].Cells[ri, 0].Value != null; ++ri, ++rows)
+                    for (int j = 0; j < cols; ++j)
+                        b.Worksheets[0].Cells[rows, j].PutValue(bs[bi].Worksheets[0].Cells[ri, j].Value);
+            }
+
+            b.Save(sfd.FileName);
+        }
     }
 }
