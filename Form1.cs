@@ -54,12 +54,12 @@ namespace SplitExcelWorkbook
             for (int i = 1; s.Cells[i, 0].Value != null && i <= maxRows; ++i)
             {
                 for (int j = 0; j < cols; ++j)
-                    ws[i % parts].Worksheets[0].Cells[1 + i / parts, j].PutValue(s.Cells[i, j].Value);
+                    ws[i % parts].Worksheets[0].Cells[((i % parts == 0) ? 0 : 1) + i / parts, j].PutValue(s.Cells[i, j].Value);
             }
 
             for (int i = 0; i < parts; ++i)
             {
-                ws[i].Save(fileprefix + i + ".xlsx");
+                ws[i].Save(fileprefix + i + ".xls");
             }
         }
 
