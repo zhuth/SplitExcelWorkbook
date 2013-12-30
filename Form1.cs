@@ -33,6 +33,9 @@ namespace SplitExcelWorkbook
             string fileprefix = ofd.FileName;
             fileprefix = fileprefix.Substring(0, fileprefix.LastIndexOf('.')) + "_part";
 
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            button1.Enabled = false;
+
             Worksheet s = w.Worksheets[0];
             int cols = 0;
             for (; s.Cells[0, cols].Value != null; cols++) ;
@@ -55,12 +58,18 @@ namespace SplitExcelWorkbook
             {
                 for (int j = 0; j < cols; ++j)
                     ws[i % parts].Worksheets[0].Cells[((i % parts == 0) ? 0 : 1) + i / parts, j].PutValue(s.Cells[i, j].Value);
+
+                Application.DoEvents();
             }
 
             for (int i = 0; i < parts; ++i)
             {
                 ws[i].Save(fileprefix + i + ".xls");
+
+                Application.DoEvents();
             }
+            progressBar1.Style = ProgressBarStyle.Blocks;
+            button1.Enabled = true;
         }
 
         private void Form1_Load(object sender, EventArgs e)
