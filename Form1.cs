@@ -37,7 +37,7 @@ namespace SplitExcelWorkbook
             button1.Enabled = false;
 
             Worksheet s = w.Worksheets[0];
-            int cols = 0;
+            int cols = 26;
             for (; s.Cells[0, cols].Value != null; cols++) ;
 
             int parts = trackBar1.Value;
@@ -92,7 +92,7 @@ namespace SplitExcelWorkbook
             }
             var b = new Workbook();
 
-            int rows = 0, cols = 0;
+            int rows = 0, cols = 26;
             // copy the first workbook
             for (; bs[0].Worksheets[0].Cells[rows, cols].Value != null; ++cols) ;
 
